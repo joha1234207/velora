@@ -1,12 +1,13 @@
 # Configuration file for the Telegram bot
-
+import os
 # Bot token - replace with your actual token
-BOT_TOKEN = "8611090952:AAGNRKzckFF_kTVaignhYfcZpBVuz7lBlLQ"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Admin user ID - replace with your Telegram ID
-ADMIN_ID = 7789281265
-SUPABASE_URL = "https://ffqjfkqohhwouahxhxtp.supabase.co"
-SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmcWpma3FvaGh3b3VhaHhoeHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODg5ODgsImV4cCI6MjA5NDI2NDk4OH0.J7q1Owtin84SM3NuzaeuZfGy_oblQfAMStn74o2-uno"
+ADMIN_ID = os.getenv("ADMIN")
+SUPABASE_URL = os.getenv("API_URL")
+
+SUPABASE_API_KEY = os.getenv("API_KEY")
 
 # Pagination settings
 POSTS_PER_PAGE = 1
