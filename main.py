@@ -1,15 +1,10 @@
-import telebot
 from flask import Flask, request
-
+import telebot
 from config import BOT_TOKEN, WEBHOOK_URL
 
-# Bot
 bot = telebot.TeleBot(BOT_TOKEN)
-
-# Flask
 app = Flask(__name__)
 
-# Handlers
 from commands_handler import register_command_handlers
 register_command_handlers(bot)
 
@@ -19,33 +14,22 @@ register_message_handlers(bot)
 from callback_handler import register_callback_handlers
 register_callback_handlers(bot)
 
-
-# Home
-@app.route("/", methods=["GET"])
-def home():
-    return "Bot ishlayapti"
+bot.remove_webhook()
+bot.set_webhook(url=f"{WEBHOOK_URL}/{BOT_TOKEN}")
 
 
-# Webhook
-@app.route("/webhook", methods=["POST"])
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
-    json_str = request.get_data().decode("UTF-8")
+    json_str = request.get_data().decode("utf-8")
     update = telebot.types.Update.de_json(json_str)
-
     bot.process_new_updates([update])
-
     return "ok", 200
 
 
-# Start
+@app.route("/")
+def home():
+    return "Bot is running"
+
+
 if __name__ == "__main__":
-    bot.remove_webhook()
-
-    bot.set_webhook(
-        url=f"{WEBHOOK_URL}/webhook"
-    )
-
-    app.run(
-        host="0.0.0.0",
-        port=10000
-    )
+    app.run(host="0.0.0.0", port=10000)
