@@ -15,6 +15,10 @@ register_message_handlers(bot)
 from callback_handler import register_callback_handlers
 register_callback_handlers(bot)
 
+# Webhook setup
+bot.remove_webhook()
+bot.set_webhook(url=f"{WEBHOOK_URL}/{BOT_TOKEN}")
+
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
@@ -30,9 +34,6 @@ def home():
 
 
 if __name__ == "__main__":
-    bot.remove_webhook()
-    bot.set_webhook(url=f"{WEBHOOK_URL}/{BOT_TOKEN}")
-
     app.run(
         host="0.0.0.0",
         port=10000
