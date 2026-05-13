@@ -4,8 +4,8 @@ from telebot import types
 import config
 import user_state
 import functions
-from posts import add_post, get_random_post
-from buttons import get_main_menu, get_back_button, get_home_buttons
+from posts import add_post, get_random_post, format_post_text, get_user_posts
+from buttons import get_main_menu, get_back_button, get_home_buttons, get_post_buttons
 from config import *
 
 
@@ -57,29 +57,33 @@ def register_message_handlers(bot):
         
         elif text == "📖 Мои посты":
             handle_my_posts_command(bot, user_id)
+        
         elif text == "🔍 Рандом пост":
             post = get_random_post(exclude_user_id=user_id)
-        if not post:
-            bot.send_message(user_id,
-                text=NO_MORE_POSTS
-            )
-            return
-                    # Save current post
+            if not post:
+                bot.send_message(
+                    user_id,
+                    text=NO_MORE_POSTS
+                )
+                return
+            
+            # Save current post
             user_state.set_data(user_id, "current_post_id", post["post_id"])
             user_state.set_data(user_id, "viewing_posts", True)
-        
-        # Get reactions
+            
+            # Get reactions
             reactions = get_post_reactions(post["post_id"])
-        
-        # Format message
-            text = format_post_text(post)
-            text += f"\n\n👍 {reactions['likes']} | 👎 {reactions['dislikes']}"
-        
+            
+            # Format message
+            post_text = format_post_text(post)
+            post_text += f"\n\n👍 {reactions['likes']} | 👎 {reactions['dislikes']}"
+            
             bot.send_message(
-            text=text,
-            parse_mode='HTML',
-            reply_markup=get_post_buttons(post["post_id"], is_owner=False)
-        )
+                user_id,
+                text=post_text,
+                parse_mode='HTML',
+                reply_markup=get_post_buttons(post["post_id"], is_owner=False)
+            )
         
         else:
             bot.send_message(
@@ -284,3 +288,16 @@ def handle_my_posts_command(bot, user_id):
         parse_mode='HTML',
         reply_markup=get_post_buttons(post["post_id"], is_owner=True)
     )
+
+
+def get_post_reactions(post_id):
+    """Get post reactions from database"""
+    # This function needs to be implemented in your functions.py
+    # For now, returning a template
+    try:
+        return {
+            'likes': functions.get_post_likes(post_id),
+            'dislikes': functions.get_post_dislikes(post_id)
+        }
+    except:
+        return {'likes': 0, 'dislikes': 0}
