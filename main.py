@@ -12,6 +12,10 @@ from commands_handler import register_command_handlers
 from message_handler import register_message_handlers
 from callback_handler import register_callback_handlers
 
+# Register handlers BEFORE starting the app
+register_command_handlers(bot)
+register_message_handlers(bot)
+register_callback_handlers(bot)
 
 
 # ========================
@@ -24,9 +28,6 @@ def webhook():
         update = telebot.types.Update.de_json(json_str)
         bot.process_new_updates([update])
     return "OK", 200
-register_command_handlers(bot)
-register_message_handlers(bot)
-register_callback_handlers(bot)
 
 
 # ========================
