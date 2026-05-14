@@ -5,7 +5,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 # Admin user ID - replace with your Telegram ID
-ADMIN_ID = os.getenv("ADMIN")
+ADMIN_ID = 7789281265
 SUPABASE_URL = os.getenv("API_URL")
 
 SUPABASE_API_KEY = os.getenv("API_KEY")
